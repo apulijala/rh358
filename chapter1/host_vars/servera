@@ -1,0 +1,10 @@
+service: 
+  name: rsyslog
+  enabled: yes
+  state: started
+
+package: 
+  name: rsyslog
+  state: present
+
+

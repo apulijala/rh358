@@ -1,0 +1,13 @@
+network_connections: 
+  - 
+    autoconnect: true
+    ip: 
+      address: 
+        - 192.168.0.11/24
+      dns: 
+        - "8.8.8.8"
+      gateway4: "192.168.0.1"
+    mac: "08:00:27:22:85:9c"
+    name: lab_conn
+    state: up
+    type: ethernet

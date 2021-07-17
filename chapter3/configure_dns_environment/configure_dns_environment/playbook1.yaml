@@ -1,0 +1,43 @@
+---
+- hosts: servera
+  become: yes
+  become_method: sudo
+  vars: 
+   the_mac : "08:00:27:52:d4:5e"
+   target_mac : "08:00:27:94:26:81"
+
+   network_connections: 
+     - name: static_net
+       type: ethernet
+       state: present
+       ip: 
+        address: 192.168.0.254/24
+        dns: ["8.8.8.8", "8.8.4.4"]
+        gw: 192.168.0.1
+        method: manual
+
+  tasks: 
+        - name: Find the correct interface. 
+          set_fact: 
+            the_interface : "{{ item }}"
+          when: 
+            - ansible_facts[item]['macaddress'] is defined
+            - ansible_facts[item]['macaddress'] == target_mac
+          loop: "{{ ansible_facts['interfaces'] }}"
+          
+        - name: Display the interface. 
+          debug: 
+             msg: "{{ the_interface }}"          
+
+        - name: nmcli and ethernet
+          community.general.nmcli:
+                type: ethernet
+                conn_name: "{{ item.name }}"
+                ip4: "{{ item.ip.address }}"
+                state: present
+                gw4: "{{ item.ip.gw }}"
+                method4: "{{ item.ip.method }}"
+                dns4: "{{ item.ip.dns }}"
+                ifname: "{{ the_interface }}"
+          loop: "{{ network_connections }}"
+

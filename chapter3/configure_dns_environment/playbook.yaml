@@ -1,0 +1,18 @@
+---
+- hosts: servera
+  become: true
+  vars: 
+       target_mac: "08:00:27:52:d4:5e"
+  tasks: 
+     - name: Find the_interface for target_mac
+       set_fact: 
+        the_interface: "{{ item }}"
+       when: 
+        - ansible_facts[item]['macaddress'] is defined
+        - ansible_facts[item]['macaddress'] == target_mac
+       loop: "{{ ansible_facts['ansible_interfaces'] }}"
+
+     - name: Display the intreface
+       debug: 
+         msg : "{{ the_interface }}"   
+    

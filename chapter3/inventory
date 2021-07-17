@@ -1,0 +1,10 @@
+[servers]
+servera 
+serverb
+serverc
+
+[lab7]
+serverb
+serverc
+
+

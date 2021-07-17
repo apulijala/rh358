@@ -1,0 +1,6 @@
+---
+- name: "Configure servers for dns lab"
+  hosts: servers
+  tasks: 
+  - include_role:
+      name: linux-system-roles.network

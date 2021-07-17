@@ -1,0 +1,6 @@
+---
+- name: "Lab 7 playbook"
+  hosts: lab7
+  tasks: 
+  - include_role:
+      name: linux-system-roles.network

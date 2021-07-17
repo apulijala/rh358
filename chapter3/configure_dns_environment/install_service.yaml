@@ -1,0 +1,15 @@
+---
+- name: "Install any service and enable it"
+  hosts: servera
+  tasks:
+   - name : "Install package for service" 
+     yum: 
+        name: "{{ package.name }}"
+        state: "{{ package.state }}"
+
+   - name: "Start and Enable the required service"
+     systemd: 
+        name:     "{{ service.name }}"
+        state:    "{{ service.state }}"
+        enabled:  "{{ service.enabled }}"
+  

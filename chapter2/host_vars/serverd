@@ -1,0 +1,27 @@
+network_connections:
+- name: team1
+  type: team
+  interface_name: team1
+  state: up # method manual
+  ip:
+   dhcp4: no
+   address: 
+    - 192.168.0.100/24
+   dns: 
+    - 8.8.8.8
+   gateway4: "192.168.0.1"
+   
+
+- name: team1-port1
+  type: ethernet
+  interface_name: eth1
+  state: up
+  master: team1
+
+
+- name: team1-port2
+  type: ethernet
+  interface_name: eth2
+  state: up
+  master: team1
+

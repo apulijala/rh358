@@ -1,0 +1,31 @@
+---
+- hosts: serverd
+  tasks: 
+  - include_role:  
+        name: linux-system-roles.network
+
+  - name: Check team0 status
+    command: /usr/bin/teamdctl team0 state dump 
+    register: team0_state
+    changed_when: false
+
+  - name: Import team0 status as Json. 
+    set_fact: 
+        team0_state: "{{ team0_state.stdout }}"
+
+  - name: Adjust Team Runner
+    command: nmcli connection modify team0 team.runner activebackup
+    notify: restart team0
+    when: 
+        - team0_state["setup"]["runner_name"] != "activebackup"
+
+  handlers: 
+     - name: restart team0 
+       command: /usr/bin/nmcli dev dis team0 
+       listen: restart team0 
+
+     - name: restart team0 
+       command: /usr/bin/nmcli con up team0 
+       listen: restart team0 
+
+

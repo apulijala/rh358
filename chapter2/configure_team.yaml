@@ -1,0 +1,5 @@
+---
+- hosts: serverd
+  tasks: 
+  - include_role:  
+        name: linux-system-roles.network

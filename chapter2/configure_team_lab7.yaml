@@ -1,0 +1,41 @@
+--- 
+- hosts: serverd
+  tasks: 
+    - name: Check if team1 is prsent. 
+      include_role: 
+        name: rhel-system-roles.network
+      when: ansible_facts['team1'] is not defined
+
+    - name: Check the runner state
+      command: teamdctl team1 config dump
+      register: team1_status
+      changed_when: false
+
+
+    - name: Register the variable. 
+      set_fact: 
+        team1_status: "{{ team1_status.stdout }}"
+
+    - name: Set the runner to activebackup 
+      command: /usr/bin/nmcli con mod team1 team.runner activebackup
+      when: 
+        - team1_status["runner"]["name"] != "activebackup"
+      notify: restart team1 
+   
+  handlers: 
+   - name : disconnect team1
+     shell: sleep 60 &&  /usr/bin/nmcli  dev dis team1;
+     listen: restart team1 
+
+   - name: Restaart team1
+     shell: sleep 30 &&  /usr/bin/nmcli con up team1; /usr/bin/nmcli con up team1-port1; /usr/bin/nmcli con up team1-port2
+     listen: restart team1
+ 
+
+
+
+
+
+
+
+

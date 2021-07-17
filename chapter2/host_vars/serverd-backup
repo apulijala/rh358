@@ -1,0 +1,21 @@
+network_connections: 
+- name: team0
+  type: team
+  interface_name: team0 
+  state: up
+  ip: 
+   dhcp4: no
+   address: 192.168.0.100/24
+   
+- name: team0-eth1
+  type: ethernet
+  interface_name: eth1
+  state: up
+  master: team0
+
+
+- name: team0-eth2
+  type: ethernet
+  interface_name: eth2
+  state: up
+  master: team0
